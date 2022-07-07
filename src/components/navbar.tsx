@@ -18,14 +18,8 @@ const MENU_ITEMS: MenuItem[] = [
 export const NavBar: FC<NavBarProps> = ({ className }) => {
     const [active, setActive] = useState<string>()
     const [position, setPosition] = useState<number>()
-    const [direction, setDirection] = useState<boolean>()
     const activeComponent = MENU_ITEMS.find((i) => i.label === active)
     const activeIndex = MENU_ITEMS.findIndex((i) => i.label === active)
-
-    const prevIndex = useRef(activeIndex)
-    useEffect(() => {
-        prevIndex.current = activeIndex
-    }, [activeIndex])
 
     const { ref, height = 0 } = useResizeObserver()
 
@@ -38,7 +32,6 @@ export const NavBar: FC<NavBarProps> = ({ className }) => {
                         key={item.label}
                         onMouseEnter={(e) => {
                             setActive(item.label)
-                            setDirection(i > activeIndex)
                             const offset = (e.target as HTMLElement).offsetLeft
                             const width = (e.target as HTMLElement).clientWidth
                             setPosition(offset + width / 2)
@@ -62,7 +55,7 @@ export const NavBar: FC<NavBarProps> = ({ className }) => {
                         />
                         <motion.div
                             className="absolute w-[120%] top-full bg-white rounded-lg shadow-lg text-gray-700 origin-top overflow-hidden"
-                            animate={{ opacity: 1, rotateX: 0, height /* adding padding */ }}
+                            animate={{ opacity: 1, rotateX: 0, height }}
                             initial={{ opacity: 0, rotateX: -5 }}
                             exit={{ opacity: 0, rotateX: -5 }}
                             transformTemplate={({ rotateX }) => {
